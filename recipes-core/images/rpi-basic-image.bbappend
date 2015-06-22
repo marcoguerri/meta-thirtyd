@@ -1,6 +1,10 @@
+IMAGE_FEATURES_remove = "ssh-server-dropbear"
 IMAGE_INSTALL += " \
+    iptables \
     shadow \
-    dropbear-default \
     dhcp-server \
     dhcp-server-config \
+    ssh-hardening \
+    iptables-rules \
+    openssh \
     "
