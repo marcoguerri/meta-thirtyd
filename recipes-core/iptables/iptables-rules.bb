@@ -8,7 +8,7 @@ SRC_URI="file://iptables"
 
 do_install() {
     install -d ${D}${sysconfdir}/sysconfig/
-    install -m 0644 ${WORKDIR}/iptables ${D}${sysconfdir}/sysconfig/
+    install -m 0644 ${WORKDIR}/iptables-rules ${D}${sysconfdir}/sysconfig/
 }
 
 
