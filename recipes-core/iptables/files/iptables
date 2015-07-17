@@ -9,9 +9,9 @@ SCRIPTNAME=/etc/init.d/$NAME
 case "$1" in
 start)
     printf "%-50s" "Starting $NAME..."
-    if [[ -f /etc/sysconfig/iptables ]];
+    if [[ -f /etc/sysconfig/iptables-rules ]];
     then
-        /usr/sbin/iptables-restore < /etc/sysconfig/iptables
+        /usr/sbin/iptables-restore < /etc/sysconfig/iptables-rules
     else
         printf "%-50s" "No $NAME rules..."
     fi

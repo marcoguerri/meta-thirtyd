@@ -1,3 +1,6 @@
+# For documentation about the update-rc.d class:
+# http://docs.openembedded.ru/update-rc-d_class.html
+
 inherit update-rc.d
 
 LICENSE = "MIT"
