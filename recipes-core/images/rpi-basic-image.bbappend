@@ -7,4 +7,5 @@ IMAGE_INSTALL += " \
     ssh-hardening \
     iptables-rules \
     openssh \
+    google-auth \
     "
