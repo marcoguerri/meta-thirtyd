@@ -24,9 +24,11 @@ DEPENDS_${PN}="libpam-dev"
 EXTRA_OEMAKE = 'all -C ${S} CC="${CC}"'
 
 # Explicitly tell which files to package
-#FILES_${PN}="${D}${libdir}/pam_google_authenticator.so ${D}${bindir}/google-authenticator"
+PACKAGES="${PN}"
 
-do_complie() {
+FILES_${PN}="${libdir}/* ${bindir}/*"
+
+do_compile() {
     oe_runmake
 }
 
