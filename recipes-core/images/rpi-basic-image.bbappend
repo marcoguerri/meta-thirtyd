@@ -8,4 +8,6 @@ IMAGE_INSTALL += " \
     iptables-rules \
     openssh \
     google-auth \
+    ntp \
+    ntpdate \
     "
