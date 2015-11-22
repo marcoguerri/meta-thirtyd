@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 S="${WORKDIR}/libpam-google-authenticator-1.0"
 
 SRC_URI="https://google-authenticator.googlecode.com/files/libpam-google-authenticator-1.0-source.tar.bz2 \
-        file://.google_authenticator"
+         file://.google_authenticator"
 
 
 SRC_URI[md5sum] = "9db0194fcae26a67dcedbcd49397e95e"
