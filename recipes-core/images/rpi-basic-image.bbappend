@@ -10,4 +10,5 @@ IMAGE_INSTALL += " \
     google-auth \
     ntp \
     ntpdate \
+    resolvconf \
     "
