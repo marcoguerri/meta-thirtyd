@@ -27,7 +27,7 @@ EXTRA_OEMAKE = 'all -C ${S} CC="${CC}"'
 # Explicitly tell which files to package
 PACKAGES="${PN}"
 
-FILES_${PN}="${libdir}/* ${bindir}/* .google_authenticator"
+FILES_${PN}="${libdir}/* ${bindir}/* /home/root/.google_authenticator"
 
 do_compile() {
     oe_runmake
@@ -44,6 +44,7 @@ do_install() {
     cp ${S}/google-authenticator ${D}${bindir}
     chmod  755 ${D}${bindir}/google-authenticator
 
-    install -m 0644 ${WORKDIR}/.google_authenticator ${D}
+    install -m 0644 -d ${D}/home/root
+    install -m 600 ${WORKDIR}/.google_authenticator ${D}/home/root
 
 }
