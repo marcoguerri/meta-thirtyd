@@ -11,4 +11,5 @@ IMAGE_INSTALL += " \
     ntp \
     ntpdate \
     resolvconf \
+    ddclient \
     "
