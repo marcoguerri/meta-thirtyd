@@ -30,22 +30,34 @@ RDEPENDS_${PN}+="perl-module-config"
 RDEPENDS_${PN}+="perl-module-io-socket-inet"
 RDEPENDS_${PN}+="perl-module-io-socket-unix"
 RDEPENDS_${PN}+="perl-module-integer"
-RDEPENDS_${PN}+="perl-module-overload"
+RDEPENDS_${PN}+="perl-module-overloading"
 
 S="${WORKDIR}/ddclient-${PV}"
 
-SRC_URI="http://netcologne.dl.sourceforge.net/project/ddclient/ddclient/ddclient-${PV}.tar.bz2"
+SRC_URI="http://netcologne.dl.sourceforge.net/project/ddclient/ddclient/ddclient-${PV}.tar.bz2 \
+         file://ddclient.conf"
 
 SRC_URI[md5sum] = "3b426ae52d509e463b42eeb08fb89e0b"
 SRC_URI[sha256sum] = "d40e2f1fd3f4bff386d27bbdf4b8645199b1995d27605a886b8c71e44d819591"
 
 PACKAGES="${PN}"
 
+FILES_${PN}="${sysconfdir}/ddclient/* ${sbindir}/ddclient"
+
+#
+# Not inheriting from autotools, tasks defined from scratch
+#
 do_fetch() {
-    for package in "${SRC_URI}";
+    for package in `echo "${SRC_URI}" | sed 's/file:\/\/[^ \]*//g'`;
     do
+        
         wget $package
         cp `basename $package` ${WORKDIR}
+    done
+
+    for file in `echo "${SRC_URI}" | sed 's/http[s\]\?:\/\/[^ \]*//g'`;
+    do
+        cp ${FILE_DIRNAME}/files/`echo $file | sed 's/file:\/\///'` ${WORKDIR}
     done
 }
 
@@ -56,4 +68,6 @@ do_unpack() {
 do_install() {
     install -m 644 -d ${D}${sbindir}
     install -m 755 ${S}/ddclient ${D}${sbindir}
+    install -m 644 -d ${D}${sysconfdir}/ddclient
+    install -m 755 ${WORKDIR}/ddclient.conf ${D}${sysconfdir}/ddclient
 }
