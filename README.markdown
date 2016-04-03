@@ -45,6 +45,7 @@ Set BBLAYERS in bblayers.conf as follows:
       <OE-ROOT>/meta-openembedded/meta-oe \
       <OE-ROOT>/meta-openembedded/meta-networking \
       <OE-ROOT>/meta-openembedded/meta-python \
+      <OE-ROOT>/meta-openembedded/meta-webserver \
       <OE-ROOT>/meta-thirtyd/ \
     "
 ```
@@ -64,9 +65,9 @@ Trigger the compilation with:
 bitbake rpi-basic-image
 ```
 
-## Customization of the image
+# Customization of the image
 
-# Initial users and passwords
+## Initial users and passwords
 To add additional users at compilation time, modify EXTRA_USER_PARAMS in meta-thirtyd/conf/distro/td.conf, e.g:
 
 ```

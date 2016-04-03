@@ -3,8 +3,6 @@ IMAGE_INSTALL += " \
     git \
     iptables \
     shadow \
-    dhcp-server \
-    dhcp-server-config \
     ssh-hardening \
     iptables-rules \
     openssh \
@@ -13,4 +11,6 @@ IMAGE_INSTALL += " \
     ntpdate \
     resolvconf \
     ddclient \
+    dnsmasq \
+    nginx \
     "
