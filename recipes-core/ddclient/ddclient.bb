@@ -1,7 +1,7 @@
 SUMMARY = "DynDns client"
 
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+LICENSE = "GPL-3.0"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 PV="3.8.3"
 PR="r0"
@@ -44,13 +44,9 @@ PACKAGES="${PN}"
 
 FILES_${PN}="${sysconfdir}/ddclient/* ${sbindir}/ddclient"
 
-#
-# Not inheriting from autotools, tasks defined from scratch
-#
 do_fetch() {
     for package in `echo "${SRC_URI}" | sed 's/file:\/\/[^ \]*//g'`;
     do
-        
         wget $package
         cp `basename $package` ${WORKDIR}
     done
