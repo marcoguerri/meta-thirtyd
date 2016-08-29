@@ -1,0 +1,72 @@
+#!/bin/sh
+
+die() {
+    echo $1
+    exit 1
+}
+
+
+usage() {
+    echo "Usage: $0 [OPTIONS]"
+    echo
+    echo "Options:"
+    echo "  --help"
+    echo "      Displays this message"
+    echo "  --oe-root"
+    echo "      Specify Openembedded root"
+    echo
+}
+
+##############################################################################
+
+OE_ROOT=""
+
+ARGS=$(getopt -q -o a \
+                 --long oe-root:, \
+                 -n "compile" -- "$@");
+
+eval set -- "$ARGS"
+
+[ $? -eq 0 ] || die "Error while parsing command line parameters"
+
+while true; do
+    case "$1" in
+        --help)
+            usage
+            exit 0
+            ;;
+        --oe-root)
+            shift
+            OE_ROOT=$1
+            shift 
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+done
+
+[ x"$OE_ROOT" != x"" ] || die "Openembedded path was not specified"
+[ -e $OE_ROOT ] || die "Openembedded path does not exist"
+
+OE_ROOT=/home/mguerri/nas/Data/Technical/development/rpi
+NFS_ROOT=/srv/rpi
+RPI_IP=192.168.0.8
+
+cd ../openembedded-core
+export BBPATH=$OE_ROOT/openembedded-core/build
+export PATH=$PATH:$OE_ROOT/openembedded-core/bitbake/bin
+echo $PATH
+
+./oe-init-build-env
+
+bitbake rpi-basic-image
+
+# New fs image is now available. Rpi won't take this very well.
+sudo systemctl stop nfs-kernel-server
+echo "Umounting..."
+sleep 5
+sudo umount $NFS_ROOT
+sudo mount $OE_ROOT/openembedded-core/build/tmp-glibc/deploy/images/raspberrypi/rpi-basic-image-raspberrypi.ext3 $NFS_ROOT
+sudo systemctl start nfs-kernel-server
