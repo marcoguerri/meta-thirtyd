@@ -14,14 +14,18 @@ SRC_URI="http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${PV}.tar
 SRC_URI[md5sum] = "6c11ce169169f0e43ee0d9986a067db8"
 SRC_URI[sha256sum] = "8a5749e218237fafc3119dd8a4fcf510ea728728b3fcf1193fcad7209be4b6d7"
 
-DEPENDS_${PN}="libbz2 \
-               libevent \
-               pkg-config"
+DEPENDS="libevent \
+         pkgconfig \
+         zlib"
 
 
-do_configure() {
-    oe_runconf
-}
+#
+# Note: prepending = to the path so that sysroot is prepended. No doing so causes
+# the include path to point to host specific directory: do_qa_configure will
+# detect this and raise an error.
+#
+EXTRA_OECONF="--with-pcre==/usr"
+
 do_install() {
     oe_runmake install
     install -m 644 ${WORKDIR}/lighttpd.conf ${D}${sysconfdir}/lighttpd.conf 
