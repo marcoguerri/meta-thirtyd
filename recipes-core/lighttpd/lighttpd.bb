@@ -18,7 +18,6 @@ DEPENDS="libevent \
          pkgconfig \
          zlib"
 
-
 #
 # Note: prepending = to the path so that sysroot is prepended. No doing so causes
 # the include path to point to host specific directory: do_qa_configure will
@@ -26,8 +25,8 @@ DEPENDS="libevent \
 #
 EXTRA_OECONF="--with-pcre==/usr"
 
-do_install() {
-    oe_runmake install
+do_install_append() {
+    install -d -m 644 ${D}${sysconfdir}
     install -m 644 ${WORKDIR}/lighttpd.conf ${D}${sysconfdir}/lighttpd.conf 
 }
 
