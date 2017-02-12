@@ -2,34 +2,35 @@
 
 ## How to setup the build environment:
 
-The following instructions refers to specific HEADs of each repository. The 
-image is not guaranteed to be working under different revisions.
+This image is developed to work with the ``morty`` release of the Yocto project
+(i.e. morty branches for openembedded-core, meta-openembedded, meta-raspberrypi
+and bitbake version 1.32).
 ```
 sudo apt-get install diffstat gawk chrpath
 mkdir openembedded && cd openembedded
 git clone https://github.com/openembedded/openembedded-core.git
 cd openembedded-core
+git checkout -b morty remotes/origin/morty
 git clone git://git.openembedded.org/bitbake.git
-cd ..
+cd bitbake
+git checkout -b 1.32 remotes/origin/1.32
+cd ../..
 git clone git://github.com/openembedded/meta-openembedded.git
+cd meta-openembedded
+git checkout -b morty remotes/origin/morty
+cd ..
 git clone https://github.com/agherzan/meta-raspberrypi
+cd meta-raspberrypi
+git checkout -b morty remotes/origin/morty
+cd ..
 install -d openembedded-core/build/conf/
 cp openembedded-core/meta/conf/local.conf.sample openembedded-core/build/conf/local.conf
 ```
 
-Checkout each repo as follows:
 
-```
-openembedded-core = "master:6f98c39418c60b7c0b25b30983d2e5257158a6a4"
-meta-raspberrypi  = "master:0776b86c6629b7294ff61e67609f2d4e10e9712c"
-meta-openembedded = "master:ea319464b673cbf9a416b582dc4766faeb998430"
-meta-thirtyd      = "master:944bf9b495005e729facf4706f0199392debc055"
-```
-
-Perform the following changes
+Apply the following changes
 * Set machine to "raspberrypi" in openembedded-core/build/conf/local.conf
-* Add DISTRO="td"
-* Remove ASSUME_PROVIDED += "libsdl-native"
+* Add DISTRO="thirtyd"
 
 Prepare the bblayers file:
 ```
@@ -50,16 +51,16 @@ Set BBLAYERS in bblayers.conf as follows:
     "
 ```
 
-Proceed as follows:
+Setup the environment:
 
 ```
 cd openembedded-core
 export BBPATH=<OE-ROOT>openembedded-core/build
 export PATH=$PATH:<OE-ROOT>/openembedded-core/bitbake/bin
-./oe-init-build-env
+. ./oe-init-build-env
 ```
 
-Trigger the compilation with:
+Trigger the compilation:
 
 ```
 bitbake rpi-basic-image
@@ -68,7 +69,7 @@ bitbake rpi-basic-image
 # Customization of the image
 
 ## Initial users and passwords
-To add additional users at compilation time, modify EXTRA_USER_PARAMS in meta-thirtyd/conf/distro/td.conf, e.g:
+To add additional users at compilation time, modify EXTRA_USER_PARAMS in meta-thirtyd/conf/distro/thirtyd.conf, e.g:
 
 ```
 EXTRA_USERS_PARAMS = " \
@@ -77,7 +78,8 @@ EXTRA_USERS_PARAMS = " \
     "
 ```
 
-To generate the hash of the password run (escape then dollar signs):
+To generate the hash of the password openssl can be used (dollar sign in the resulting
+has must be escaped):
 
 ```
 openssl passwd -1 <PASSWORD>
