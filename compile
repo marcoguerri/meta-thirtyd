@@ -14,17 +14,18 @@ usage() {
     echo "      Displays this message"
     echo "  --oe-root"
     echo "      Specify Openembedded root"
+    echo "  --nfs-root"
+    echo "      Root of nfs mount"
     echo
 }
 
-##############################################################################
-
 OE_ROOT=""
-
+NFS_ROOT=""
 ARGS=$(getopt -q -o a \
-                 --long oe-root:, \
+                 --long oe-root:, --long nfs-root:, \
                  -n "compile" -- "$@");
 
+# Reset command line arguments as ARGS (parsed by getopt)
 eval set -- "$ARGS"
 
 [ $? -eq 0 ] || die "Error while parsing command line parameters"
@@ -40,6 +41,11 @@ while true; do
             OE_ROOT=$1
             shift 
             ;;
+        --nfs-root)
+            shift
+            NFS_ROOT=$1
+            shift
+            ;;
         --)
             shift
             break
@@ -50,23 +56,37 @@ done
 [ x"$OE_ROOT" != x"" ] || die "Openembedded path was not specified"
 [ -e $OE_ROOT ] || die "Openembedded path does not exist"
 
-OE_ROOT=/home/mguerri/nas/Data/Technical/development/rpi
-NFS_ROOT=/srv/rpi
-RPI_IP=192.168.0.8
+cd ${OE_ROOT}/openembedded-core
+export BBPATH=${OE_ROOT}/openembedded-core/build
+export PATH=${PATH}:${OE_ROOT}/openembedded-core/bitbake/bin
 
-cd ../openembedded-core
-export BBPATH=$OE_ROOT/openembedded-core/build
-export PATH=$PATH:$OE_ROOT/openembedded-core/bitbake/bin
-echo $PATH
-
-./oe-init-build-env
-
+if [ ! -f oe-init-build-env ];
+then
+    die "Could not find oe-init-build-env\n"
+fi
+. ./oe-init-build-env
 bitbake rpi-basic-image
 
+
+if [ $? -ne 0 ];
+then
+    die "Compilation failed"
+fi
+echo $NFS_ROOT
+if [ x"$NFS_ROOT" = x"" ];
+then
+    die "NFS_ROOT not specified, exiting"
+fi
+
+
+FS_PATH="${OE_ROOT}/openembedded-core/build/tmp-glibc/deploy/images/raspberrypi/rpi-basic-image-raspberrypi.ext3"
 # New fs image is now available. Rpi won't take this very well.
-sudo systemctl stop nfs-kernel-server
-echo "Umounting..."
-sleep 5
-sudo umount $NFS_ROOT
-sudo mount $OE_ROOT/openembedded-core/build/tmp-glibc/deploy/images/raspberrypi/rpi-basic-image-raspberrypi.ext3 $NFS_ROOT
-sudo systemctl start nfs-kernel-server
+sudo mount -o remount $FS_PATH $NFS_ROOT > /dev/null 2>&1
+
+if [ $? -eq 32 ];
+then
+    # Filesystem was not mounted
+    sudo mount $FS_PATH $NFS_ROOT > /dev/null 2>&1
+fi
+
+sudo systemctl restart nfs-kernel-server
