@@ -6,31 +6,32 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 PV="3.8.3"
 PR="r0"
 
-RDEPENDS_${PN}+="perl"
-RDEPENDS_${PN}+="perl-module-strict"
-RDEPENDS_${PN}+="perl-module-getopt-long"
-RDEPENDS_${PN}+="perl-module-vars"
-RDEPENDS_${PN}+="perl-module-warnings-register"
-RDEPENDS_${PN}+="perl-module-warnings"
-RDEPENDS_${PN}+="perl-module-carp"
-RDEPENDS_${PN}+="perl-module-exporter"
-RDEPENDS_${PN}+="perl-module-constant"
-RDEPENDS_${PN}+="perl-module-exporter-heavy"
-RDEPENDS_${PN}+="perl-module-sys-hostname"
-RDEPENDS_${PN}+="perl-module-xsloader"
-RDEPENDS_${PN}+="perl-module-autoloader"
-RDEPENDS_${PN}+="perl-module-io-socket"
-RDEPENDS_${PN}+="perl-module-io-handle"
-RDEPENDS_${PN}+="perl-module-symbol"
-RDEPENDS_${PN}+="perl-module-selectsaver"
-RDEPENDS_${PN}+="perl-module-io"
-RDEPENDS_${PN}+="perl-module-socket"
-RDEPENDS_${PN}+="perl-module-errno"
-RDEPENDS_${PN}+="perl-module-config"
-RDEPENDS_${PN}+="perl-module-io-socket-inet"
-RDEPENDS_${PN}+="perl-module-io-socket-unix"
-RDEPENDS_${PN}+="perl-module-integer"
-RDEPENDS_${PN}+="perl-module-overloading"
+RDEPENDS_${PN}="\
+    perl \
+    perl-module-strict \
+    perl-module-getopt-long \
+    perl-module-vars \
+    perl-module-warnings-register \
+    perl-module-warnings \
+    perl-module-carp \
+    perl-module-exporter \
+    perl-module-constant \
+    perl-module-exporter-heavy \
+    perl-module-sys-hostname \
+    perl-module-xsloader \
+    perl-module-autoloader \
+    perl-module-io-socket \
+    perl-module-io-handle \
+    perl-module-symbol \
+    perl-module-selectsaver \
+    perl-module-io \
+    perl-module-socket \
+    perl-module-errno \
+    perl-module-config \
+    perl-module-io-socket-inet \
+    perl-module-io-socket-unix \
+    perl-module-integer \
+    perl-module-overloading"
 
 S="${WORKDIR}/ddclient-${PV}"
 
@@ -42,18 +43,20 @@ SRC_URI[sha256sum] = "d40e2f1fd3f4bff386d27bbdf4b8645199b1995d27605a886b8c71e44d
 
 PACKAGES="${PN}"
 
-FILES_${PN}="${sysconfdir}/ddclient/* ${sbindir}/ddclient"
+FILES_${PN}="\
+    ${sysconfdir}/ddclient/* \
+    ${sbindir}/ddclient"
 
 do_fetch() {
-    for package in `echo "${SRC_URI}" | sed 's/file:\/\/[^ \]*//g'`;
+    for package in $(echo "${SRC_URI}" | sed 's/file:\/\/[^ \]*//g');
     do
         wget $package
-        cp `basename $package` ${WORKDIR}
+        cp $(basename $package) ${WORKDIR}
     done
 
-    for file in `echo "${SRC_URI}" | sed 's/http[s\]\?:\/\/[^ \]*//g'`;
+    for file in $(echo "${SRC_URI}" | sed 's/http[s\]\?:\/\/[^ \]*//g');
     do
-        cp ${FILE_DIRNAME}/files/`echo $file | sed 's/file:\/\///'` ${WORKDIR}
+        cp ${FILE_DIRNAME}/files/$(echo $file | sed 's/file:\/\///') ${WORKDIR}
     done
 }
 
