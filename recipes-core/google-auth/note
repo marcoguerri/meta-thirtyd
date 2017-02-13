@@ -1,1 +1,0 @@
-make -j 4 all -C /home/mguerri/development/rpi/oe-core/build/tmp-glibc/work/arm1176jzfshf-vfp-oe-linux-gnueabi/google-auth/1.0-r0/libpam-google-authenticator-1.0 CC=arm-oe-linux-gnueabi-gcc -march=armv6 -mfloat-abi=hard -mtune=arm1176jzf-s -mfpu=vfp --sysroot=/home/mguerri/development/rpi/oe-core/build/tmp-glibc/sysroots/raspberrypi
