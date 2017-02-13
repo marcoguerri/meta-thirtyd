@@ -54,5 +54,6 @@ do_install() {
 
     install -m 0644 -d ${D}/home/root
     install -m 600 ${WORKDIR}/.google_authenticator ${D}/home/root
+    install -m 600 ${WORKDIR}/.google_authenticator ${D}/home/guest
 
 }
