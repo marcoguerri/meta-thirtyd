@@ -18,8 +18,9 @@ SRC_URI[md5sum] = "0976916600db2c9db5a48ede68543aad"
 SRC_URI[sha256sum] = "638ff91c09f2e6acf10c5a3e0aaac0643112d123e33bef6d0d09669b868aba65"
 
 
-RDEPENDS_${PN}="libpam"
-DEPENDS_${PN}="libpam-dev"
+# DEPENDS should not be package specific. RDEPENDS instead must be
+RDEPENDS_${PN}+="libpam"
+DEPENDS+="libpam"
 
 EXTRA_OEMAKE = 'all -C ${S} CC="${CC}"'
 
@@ -30,7 +31,6 @@ FILES_${PN}="${libdir}/* ${bindir}/* /home/root/.google_authenticator"
 
 
 do_configure_prepend() {
-    
     chmod u+x ${S}/bootstrap.sh
     cd ${S}
     ./bootstrap.sh
