@@ -1,2 +1,2 @@
-dwc_otg.lpm_enable=0 console=tty1,115200 root=/dev/nfs rootfstype=nfs nfsroot=192.168.0.11:/srv/rpi ip=dhcp debug
+dwc_otg.lpm_enable=0 console=tty1,115200 ip=dhcp debug root=/dev/mmcblk0p2
 
