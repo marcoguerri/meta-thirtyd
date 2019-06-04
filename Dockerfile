@@ -41,8 +41,12 @@ RUN cd $HOME && \
 	git clone https://github.com/marcoguerri/meta-thirtyd
 
 
-ARG oe_home=/home/dev
-COPY local.conf $oe_home/openembedded/openembedded-core/build/conf/local.conf
-COPY bblayers.conf $oe_home/openembedded/openembedded-core/build/conf/bblayers.conf
+ARG home=/home/dev
+COPY local.conf $home/openembedded/openembedded-core/build/conf/local.conf
+COPY bblayers.conf $home/openembedded/openembedded-core/build/conf/bblayers.conf
 
 RUN virtualenv -p /usr/bin/python2.7 $HOME/p27
+RUN . ./$home/p27/bin/activate && \
+	cd $home/openembedded/openembedded-core && \
+	. ./oe-init-build-env && \
+	bitbake core-image-minimal
