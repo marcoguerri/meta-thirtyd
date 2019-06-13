@@ -16,6 +16,7 @@ RUN apt-get update && \
 		g++ \
 		gcc \
 		make \
+		qemu-kvm \
 		texinfo \
 		vim \
 		wget
@@ -50,3 +51,5 @@ RUN . ./$home/p27/bin/activate && \
 	cd $home/openembedded/openembedded-core && \
 	. ./oe-init-build-env && \
 	bitbake core-image-minimal
+
+COPY run_qemu.sh $home

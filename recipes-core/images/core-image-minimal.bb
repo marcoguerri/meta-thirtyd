@@ -1,6 +1,7 @@
-IMAGE_FEATURES_remove = "ssh-server-dropbear"
+FEATURE_INSTALL = "ssh-server-openssh"
 
 IMAGE_INSTALL += " \
+    dhcp-client \
     git \
     iptables \
     shadow \
