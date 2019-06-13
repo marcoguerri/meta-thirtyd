@@ -1,4 +1,4 @@
-FEATURE_INSTALL = "ssh-server-openssh"
+IMAGE_FEATURES += "ssh-server-openssh"
 
 IMAGE_INSTALL += " \
     dhcp-client \
@@ -7,7 +7,6 @@ IMAGE_INSTALL += " \
     shadow \
     ssh-hardening \
     iptables-rules \
-    openssh \
     google-auth \
     ntp \
     ntpdate \
