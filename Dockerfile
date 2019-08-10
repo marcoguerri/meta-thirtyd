@@ -19,7 +19,10 @@ RUN apt-get update && \
 		qemu-kvm \
 		texinfo \
 		vim \
-		wget
+		wget \
+		bridge-utils \
+		isc-dhcp-client \
+		libcap2-bin
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
