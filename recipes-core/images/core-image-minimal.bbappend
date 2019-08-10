@@ -10,9 +10,8 @@ IMAGE_INSTALL += " \
     google-auth \
     ntp \
     ntpdate \
-    resolvconf \
     ddclient \
     dnsmasq \
-    nginx \
     lighttpd \
+    bash \
     "

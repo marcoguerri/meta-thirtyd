@@ -37,11 +37,11 @@ USER dev
 
 RUN cd $HOME && \
 	mkdir openembedded && cd openembedded && \
-	git clone -b sumo https://github.com/openembedded/openembedded-core.git && \
+	git clone -b warrior https://github.com/openembedded/openembedded-core.git && \
 	install -d openembedded-core/build/conf && \
-	git clone -b 1.38 git://git.openembedded.org/bitbake.git && \
-	git clone -b sumo git://github.com/openembedded/meta-openembedded.git && \
-	git clone -b sumo https://github.com/agherzan/meta-raspberrypi && \
+	git clone -b 1.42 git://git.openembedded.org/bitbake.git && \
+	git clone -b warrior git://github.com/openembedded/meta-openembedded.git && \
+	git clone -b warrior https://github.com/agherzan/meta-raspberrypi && \
 	git clone https://github.com/marcoguerri/meta-thirtyd
 
 
@@ -49,10 +49,16 @@ ARG home=/home/dev
 COPY local.conf $home/openembedded/openembedded-core/build/conf/local.conf
 COPY bblayers.conf $home/openembedded/openembedded-core/build/conf/bblayers.conf
 
+
 RUN virtualenv -p /usr/bin/python2.7 $HOME/p27
 RUN . ./$home/p27/bin/activate && \
 	cd $home/openembedded/openembedded-core && \
 	. ./oe-init-build-env && \
-	bitbake core-image-minimal
+	bitbake core-image-minimal || \
+	touch /tmp/build_failed && echo "*** Warning: the build failed, but this layer will complete successfully ***"
+
+RUN [ -e /tmp/build_failed ] && \
+	echo "*** OpenEmbedded build failed, this container can be used only for debugging purposes ***" && \
+	exit 1
 
 COPY run_qemu.sh $home

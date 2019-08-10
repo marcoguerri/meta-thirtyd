@@ -4,8 +4,11 @@ home=~dev
 build_root=${home}/openembedded/openembedded-core/build/tmp-glibc/deploy/images/qemux86-64
 
 
-# Docker container must run with NETADMIN capabilities, and user must be root
+# Docker container must run with NET_ADMIN capabilities, and user inside the container must 
+# be root or have NET_ADMIN capability assigned to /bin/ip
+
 #  sudo docker run -u root --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun -ti marcoguerri/oe_env
+
 # Setup bridge
 ip link set down dev br0 && brctl delbr br0 || true
 
