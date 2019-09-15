@@ -7,6 +7,7 @@ IMAGE_INSTALL += " \
     shadow \
     ssh-hardening \
     iptables-rules \
+    linux-firmware \
     google-auth \
     ntp \
     ntpdate \

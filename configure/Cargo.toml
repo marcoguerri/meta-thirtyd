@@ -1,0 +1,5 @@
+[package]
+name = "thirtyd_configure"
+version = "0.0.1"
+
+authors = [ "Marco Guerri <marco.guerri.dev@fastmail.com>" ]

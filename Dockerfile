@@ -42,23 +42,18 @@ RUN cd $HOME && \
 	git clone -b 1.42 git://git.openembedded.org/bitbake.git && \
 	git clone -b warrior git://github.com/openembedded/meta-openembedded.git && \
 	git clone -b warrior https://github.com/agherzan/meta-raspberrypi && \
-	git clone https://github.com/marcoguerri/meta-thirtyd && \
-	touch /tmp/file
-
+	git clone https://github.com/marcoguerri/meta-thirtyd
 
 ARG home=/home/dev
-COPY local.conf $home/openembedded/openembedded-core/build/conf/local.conf
-COPY bblayers.conf $home/openembedded/openembedded-core/build/conf/bblayers.conf
 
+RUN mkdir $home/openembedded/build
+VOLUME $home/openembedded/build
 
-RUN virtualenv -p /usr/bin/python2.7 $HOME/p27
-RUN /bin/bash -c "cd $home/openembedded/openembedded-core && \
-	source /$home/p27/bin/activate && source oe-init-build-env && \
-	bitbake core-image-minimal || \
-	touch /tmp/build_failed"
+COPY --chown=dev:dev layer/local.conf $home/openembedded/build/conf/local.conf
+COPY --chown=dev:dev layer/bblayers.conf $home/openembedded/build/conf/bblayers.conf
 
-RUN [ -e /tmp/build_failed ] && \
-	echo "*** OpenEmbedded build failed, this container can be used only for debugging purposes ***" && \
-	exit 1 ||  exit 0
+COPY --chown=dev:dev build_scripts/run_qemu.sh $home
+COPY --chown=dev:dev build_scripts/build_image.sh $home
 
-COPY run_qemu.sh $home
+RUN chmod u+x $home/run_qemu.sh
+RUN chmod u+x $home/build_image.sh
