@@ -16,16 +16,20 @@ RUN apt-get update && \
 		g++ \
 		gcc \
 		make \
+		qemu-system-arm \
 		qemu-kvm \
 		texinfo \
 		vim \
 		wget \
 		bridge-utils \
 		isc-dhcp-client \
-		libcap2-bin
+		libcap2-bin \
+		sudo
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
+
+RUN echo "dev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \

@@ -5,8 +5,8 @@ set -e
 [[ $(whoami) == "dev" ]] || echo "This script should run as user dev!"
 
 virtualenv -p /usr/bin/python2.7 ${HOME}/p27
-cd ${HOME}/openembedded/openembedded-core 
-source ${HOME}/p27/bin/activate
+cd ~dev/openembedded/openembedded-core 
+source ~dev/p27/bin/activate
 source oe-init-build-env /home/dev/openembedded/build
 
 build=0
