@@ -3,7 +3,7 @@ SUMMARY = "DynDns client"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
-PV="3.8.3"
+PV="3.9.0"
 PR="r0"
 
 RDEPENDS_${PN}="\
@@ -35,7 +35,7 @@ RDEPENDS_${PN}="\
 
 S="${WORKDIR}/ddclient-${PV}"
 
-SRC_URI="http://netcologne.dl.sourceforge.net/project/ddclient/ddclient/ddclient-${PV}.tar.bz2 \
+SRC_URI="https://github.com/ddclient/ddclient/archive/v${PV}.tar.gz \
          file://ddclient.conf"
 
 SRC_URI[md5sum] = "3b426ae52d509e463b42eeb08fb89e0b"
@@ -61,7 +61,7 @@ do_fetch() {
 }
 
 do_unpack() {
-    tar xvf ${WORKDIR}/${PN}-${PV}.tar.bz2
+    tar xvf ${WORKDIR}/v${PV}.tar.gz
 }
 
 do_install() {
