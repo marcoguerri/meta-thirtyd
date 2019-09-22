@@ -37,8 +37,9 @@ if [[ ${platform} == "x86_64" ]]; then
                        -nographic \
                        -serial mon:stdio \
                        -drive file=${deploy_dir}/core-image-minimal-qemux86-64.ext4,if=virtio,format=raw \
-                       -net nic,model=virtio,macaddr=00:11:22:33:44:55 \
-                       -net tap,ifname=tap0
+                       -device e1000,macaddr=00:11:22:33:44:55,id=hintf \
+                       -netdev tap,ifname=tap0,id=hintf,script=no
+
 )
 else
 (
@@ -56,6 +57,10 @@ else
     # qemu does not implement a full cprman clock controller, which according to
     # Documentation/devicetree/bindings/clock/brcm,bcm2835-cprman.txt (linux source code)
     # distributes the clock to the audio domain
+
+    # Note that the ethernet interface is not supported. On the Raspberri Pi 2, the ethernet
+    # interface goes through the USB controller, which is also not supported by the raspi2
+    # machine type
     qemu-system-arm -M raspi2 \
                         -dtb ${deploy_dir}/bcm2709-rpi-2-b.dtb \
                         -sd ${deploy_dir}/core-image-minimal-raspberrypi2.rpi-sdimg \
@@ -63,8 +68,7 @@ else
                         -m 1G \
                         -smp 4 \
                         -serial mon:stdio \
-			-nographic \
+                        -nographic \
                         -append "rw earlyprintk loglevel=8  console=ttyAMA0 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootdelay=5"
 )
 fi
-
