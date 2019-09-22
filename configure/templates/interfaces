@@ -1,0 +1,17 @@
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+ 
+auto lo
+iface lo inet loopback
+
+# Wired or wireless interfaces
+auto {{ network.interface_name }}
+iface {{  network.interface_name }} inet static
+    address {{ network.ipv4_address }}
+    netmask {{ network.ipv4_netmask }}
+    gateway {{ network.ipv4_gateway }}
+
+{% if network.ipv6_address != "" %}
+iface {{ network.interface_name }} inet6 static
+    address {{ network.ipv6_address }}
+    netmask {{ network.ipv6_netmask }}
+{% endif %}
