@@ -1,12 +1,12 @@
 # Building the container
 The container includes a complete openembedded build environment.
 ```
-sudo ./build_container.sh
+sudo ./build_container.sh <IMAGE_TAG>
 ```
 
 # Running the build inside the container
 ```
-sudo ./run_container_build.sh
+sudo ./run_build_in_container.sh
 ```
 
 # Run image in qemu

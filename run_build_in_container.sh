@@ -1,6 +1,9 @@
 #!/bin/bash
 
-[[ $(whoami) == "root" ]] || ( echo "Please run this script as root" && exit 1)
+set -x
+
+[[ $(whoami) != "root" ]] && echo "Please run this script as root" && exit 1
+
 ( 
     docker volume inspect oe_build_bolume >& /dev/null && \
     echo "Docker volume oe_build_volume already exists..." || \

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e
+set -ex
 
-[[ $(whoami) == "dev" ]] || echo "This script should run as user dev!"
+[[ $(whoami) != "dev" ]] && echo "This script should run as user dev!" && exit 1
 
 virtualenv -p /usr/bin/python2.7 ${HOME}/p27
 cd ~dev/openembedded/openembedded-core 
