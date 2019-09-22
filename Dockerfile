@@ -51,7 +51,6 @@ RUN cd $HOME && \
 ARG home=/home/dev
 
 RUN mkdir $home/openembedded/build
-VOLUME $home/openembedded/build
 
 COPY --chown=dev:dev layer/local.conf $home/openembedded/build/conf/local.conf
 COPY --chown=dev:dev layer/bblayers.conf $home/openembedded/build/conf/bblayers.conf
