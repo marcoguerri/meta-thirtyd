@@ -15,4 +15,5 @@ IMAGE_INSTALL += " \
     dnsmasq \
     lighttpd \
     bash \
+    kernel-modules \
     "
