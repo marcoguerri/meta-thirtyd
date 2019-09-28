@@ -1,5 +1,7 @@
 IMAGE_FEATURES += "ssh-server-openssh"
 
+IMAGE_FEATURE_remote = "allow-root-login"
+
 IMAGE_INSTALL += " \
     dhcp-client \
     git \
@@ -9,11 +11,12 @@ IMAGE_INSTALL += " \
     iptables-rules \
     linux-firmware \
     google-auth \
-    ntp \
     ntpdate \
     ddclient \
     dnsmasq \
     lighttpd \
     bash \
     kernel-modules \
+    psmisc \
+    procps \
     "
