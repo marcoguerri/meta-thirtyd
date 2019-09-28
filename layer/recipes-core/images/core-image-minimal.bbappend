@@ -1,6 +1,6 @@
 IMAGE_FEATURES += "ssh-server-openssh"
 
-IMAGE_FEATURE_remote = "allow-root-login"
+IMAGE_FEATURES_remove = "debug-tweaks allow-root-login allow-empty-password packagegroup-base-extended"
 
 IMAGE_INSTALL += " \
     dhcp-client \
