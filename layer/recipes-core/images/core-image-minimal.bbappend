@@ -6,8 +6,8 @@ IMAGE_INSTALL += " \
     dhcp-client \
     git \
     iptables \
+    hostapd \
     shadow \
-    ssh-hardening \
     iptables-rules \
     linux-firmware \
     google-auth \
