@@ -19,4 +19,6 @@ IMAGE_INSTALL += " \
     kernel-modules \
     psmisc \
     procps \
+    rtl8192 \
+    iw \
     "
