@@ -23,8 +23,6 @@ RPROVIDES_${PN}="kernel-module-8192eu-${KERNEL_VERSION}"
 
 FILES_${PN}="${base_libdir}/modules/"
 
-DEPENDS="bison-native bc-native openssl-native"
-
 do_unpack() {
   # Unpack sources in ${WORKDIR} and make them available in ${S}
   unzip -o "${DL_DIR}/TP-Link_Driver_Linux_series8_beta.zip"
