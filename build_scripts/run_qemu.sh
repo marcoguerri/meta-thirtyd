@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -e
+set -ex
 
 
 platform=${1}
@@ -10,24 +10,44 @@ case "$platform" in
         * ) echo "Invalid platform"; exit 1;;
 esac
 
-# Docker container must run with NET_ADMIN capabilities, and user inside the container must
-# be root or have NET_ADMIN capability assigned to /bin/ip
+# Container privileges required:
+#
+# * sudo on /sbin/ip,/sbin/ip,/sbin/dhclient,/sbin/brctl + CAP_NET_ADMIN + CAP_SETUID + CAP_SETGID + CAP_AUDIT_WRITE
+#
+#   CAP_NET_ADMIN alon is not sufficient to create a bridge or a tap device. The container,
+#   when running as root, has a restricted bounding set of capabilities and CAP_NET_ADMIN,
+#   CAP_SETUID, CAP_SETGID, CAP_AUDIT_WRITE are not included in the list.
+#
+#   Docker does not support adding capabilities to non-root user (via --cap-add), 
+#   and inheritable capabilities are not preseved across execve for non-root users. 
+#   --cap-add does add CAP_NET_ADMIN to the inheritable and bounding set (but not effective).
+#
+#   Rules for capabilities assignement after execve:
+#   P'(permitted) = (P(inheritable) & F(inheritable)) | (F(permitted) & cap_bset)
+#   P'(effective) = F(effective) ? P'(permitted) : 0
+#   P'(inheritable) = P(inheritable)    [i.e., unchanged]
+#   Where P is old capability set, P' is capability set after execv and F is file capability set.
+#   Bounding set is the thread capability bounding set and remains unchanged if not modified.
+# 
+# * Access to /dev/net/tun to issue ioctl to create tap device. By default the device cgroups has 
+#   rwm access to /dev/net/tun. One-liner to check devices.allow for a container: 
+#   container_id=0247a6488d52; 
+#   sudo cat /sys/fs/cgroup/devices/$(cat /proc/$(sudo docker inspect -f '{{.State.Pid}}' ${container_id})/cgroup | grep devices | awk -F":" '{ print $3 }')/devices.list
 
-#  sudo docker run -u root --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun -ti oe_build
 
 # Setup bridge
-ip link set down dev br0 && brctl delbr br0 || true
+sudo /sbin/ip link set down dev br0 && /sbin/brctl delbr br0 || true
 
-ip link add name br0 type bridge
-ip link set eth0 master br0
-ip addr flush dev eth0
-dhclient br0
+sudo /sbin/ip link add name br0 type bridge
+sudo /sbin/ip link set eth0 master br0
+sudo /sbin/ip addr flush dev eth0
+sudo /sbin/dhclient br0
 
-ip link set down dev tap0 && ip link delete tap0 || true
+sudo /sbin/ip link set down dev tap0 && sudo /sbin/ip link delete tap0 || true
 
 # Setup tap device for qemu
-ip tuntap add tap0 mode tap
-brctl addif br0 tap0
+sudo /sbin/ip tuntap add tap0 mode tap
+sudo /sbin/brctl addif br0 tap0
 
 if [[ ${platform} == "x86_64" ]]; then
 (

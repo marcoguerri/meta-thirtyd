@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 [[ $(whoami) != "root" ]] && echo "Please run this script as root" && exit 1
 
 ( 
@@ -12,10 +10,14 @@ set -x
     docker inspect oe_build >& /dev/null && \
     echo "Docker container already exists, restarting..." && \
     docker stop oe_build && \
-    docker start -ai oe_build 
+    docker start -ai oe_build
 
 ) || docker run \
+	--cap-drop=ALL \
 	--cap-add=NET_ADMIN \
+	--cap-add=SETUID \
+	--cap-add=SETGID \
+	--cap-add=AUDIT_WRITE \
 	-v oe_build_volume:/home/dev/openembedded/build \
 	--device /dev/net/tun:/dev/net/tun \
 	-it \
