@@ -41,11 +41,11 @@ USER dev
 
 RUN cd $HOME && \
 	mkdir openembedded && cd openembedded && \
-	git clone -b warrior https://github.com/openembedded/openembedded-core.git && \
+	git clone -b dunfell https://github.com/openembedded/openembedded-core.git && \
 	install -d openembedded-core/build/conf && \
-	git clone -b 1.42 git://git.openembedded.org/bitbake.git && \
-	git clone -b warrior git://github.com/openembedded/meta-openembedded.git && \
-	git clone -b warrior https://github.com/agherzan/meta-raspberrypi && \
+	git clone -b 1.46 git://git.openembedded.org/bitbake.git && \
+	git clone -b dunfell git://github.com/openembedded/meta-openembedded.git && \
+	git clone -b dunfell https://github.com/agherzan/meta-raspberrypi && \
 	git clone https://github.com/marcoguerri/meta-thirtyd
 
 ARG home=/home/dev
