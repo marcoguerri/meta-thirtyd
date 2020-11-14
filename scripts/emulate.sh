@@ -1,13 +1,18 @@
 #!/bin/bash
 set -ex
 
+OE_ROOT="/home/dev/openembedded"
 
-platform=${1}
-
-case "$platform" in
-        x86_64 ) echo "Starting qemu x86_64"; build=1;;
-        arm ) echo "Starting qemu arm"; build=0;;
-        * ) echo "Invalid platform"; exit 1;;
+machine=$(grep "^MACHINE" ${OE_ROOT}/build/conf/local.conf | sed 's/[^"]*"\([^"]*\)"/\1/')
+case "${machine}" in
+    qemux86-64)
+        ;; 
+    *arm*)
+        ;;
+    *)
+        echo "Machine type not supported: ${machine}"
+        exit 1
+        ;;
 esac
 
 # Container privileges required:
@@ -36,34 +41,36 @@ esac
 
 
 # Setup bridge
-sudo /sbin/ip link set down dev br0 && /sbin/brctl delbr br0 || true
+if ! /sbin/brctl show br0; then
+    sudo /sbin/ip link add name br0 type bridge
+    sudo /sbin/ip link set eth0 master br0
+fi
 
-sudo /sbin/ip link add name br0 type bridge
-sudo /sbin/ip link set eth0 master br0
 sudo /sbin/ip addr flush dev eth0
+sudo /sbin/ip addr flush dev br0
 sudo /sbin/dhclient br0
 
-sudo /sbin/ip link set down dev tap0 && sudo /sbin/ip link delete tap0 || true
 
-# Setup tap device for qemu
-sudo /sbin/ip tuntap add tap0 mode tap
-sudo /sbin/brctl addif br0 tap0
+if ! /sbin/ip link show tap0; then
+    sudo /sbin/ip tuntap add tap0 mode tap
+    sudo /sbin/ip link set tap0 master br0
+    sudo /sbin/ip link set tap0 up
+fi
 
-if [[ ${platform} == "x86_64" ]]; then
+if [[ ${machine} == "qemux86-64" ]]; then
 (
-    deploy_dir=~dev/openembedded/openembedded-core/build/tmp-glibc/deploy/images/qemux86-64
+    deploy_dir="${OE_ROOT}/build/tmp-glibc/deploy/images/${machine}"
     qemu-system-x86_64 -kernel ${deploy_dir}/bzImage \
                        --append "console=ttyS0 root=/dev/vda" \
                        -nographic \
                        -serial mon:stdio \
-                       -drive file=${deploy_dir}/core-image-minimal-qemux86-64.ext4,if=virtio,format=raw \
-                       -device e1000,macaddr=00:11:22:33:44:55,id=hintf \
-                       -netdev tap,ifname=tap0,id=hintf,script=no
-
+                       -drive file=${deploy_dir}/core-image-minimal-${machine}.ext4,if=virtio,format=raw \
+                       -netdev tap,id=network0,ifname=tap0,script=no,downscript=no \
+                       -device e1000,netdev=network0,mac=00:11:22:33:44:55
 )
 else
 (
-    deploy_dir=~dev/openembedded/build/tmp-glibc/deploy/images/raspberrypi2/
+    deploy_dir="${OE_ROOT}/build/tmp-glibc/deploy/images/raspberrypi2/"
     # Note: all the append kernel command line parameters effectively
     # overwrite what is written in cmdline.txt (the file used by Rpi bootloader
     # to populate kernel command line arguments according to the boot protocol), 

@@ -55,8 +55,8 @@ RUN mkdir $home/openembedded/build
 COPY --chown=dev:dev layer/local.conf $home/openembedded/build/conf/local.conf
 COPY --chown=dev:dev layer/bblayers.conf $home/openembedded/build/conf/bblayers.conf
 
-COPY --chown=dev:dev build_scripts/run_qemu.sh $home
-COPY --chown=dev:dev build_scripts/build_image.sh $home
+COPY --chown=dev:dev scripts/emulate.sh $home
+COPY --chown=dev:dev scripts/build.sh $home
 
-RUN chmod u+x $home/run_qemu.sh
-RUN chmod u+x $home/build_image.sh
+RUN chmod u+x $home/emulate.sh
+RUN chmod u+x $home/build.sh
