@@ -52,8 +52,8 @@ ARG home=/home/dev
 
 RUN mkdir $home/openembedded/build
 
-COPY --chown=dev:dev layer/local.conf $home/openembedded/build/conf/local.conf
-COPY --chown=dev:dev layer/bblayers.conf $home/openembedded/build/conf/bblayers.conf
+COPY --chown=dev:dev local.conf $home/openembedded/build/conf/local.conf
+COPY --chown=dev:dev bblayers.conf $home/openembedded/build/conf/bblayers.conf
 
 COPY --chown=dev:dev scripts/emulate.sh $home
 COPY --chown=dev:dev scripts/build.sh $home
