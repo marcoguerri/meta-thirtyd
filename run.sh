@@ -18,15 +18,11 @@ else
 
   if ! docker image inspect oe_build >& /dev/null; then
     echo "Image does not exist, building it..."
-    docker build -t oe_build . 
+    docker build --no-cache -t oe_build . 
   fi
   echo "Creating container based on oe_build image"
   docker run \
    --cap-add=ALL \
-   --cap-add=NET_ADMIN \
-   --cap-add=SETUID \
-   --cap-add=SETGID \
-   --cap-add=AUDIT_WRITE \
    -v oe_build_volume:/home/dev/openembedded/build \
    --device /dev/net/tun:/dev/net/tun \
    -it \

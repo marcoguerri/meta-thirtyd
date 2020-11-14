@@ -7,7 +7,7 @@ machine=$(grep "^MACHINE" ${OE_ROOT}/build/conf/local.conf | sed 's/[^"]*"\([^"]
 case "${machine}" in
     qemux86-64)
         ;; 
-    *arm*)
+    raspberrypi2)
         ;;
     *)
         echo "Machine type not supported: ${machine}"
@@ -68,7 +68,7 @@ if [[ ${machine} == "qemux86-64" ]]; then
                        -netdev tap,id=network0,ifname=tap0,script=no,downscript=no \
                        -device e1000,netdev=network0,mac=00:11:22:33:44:55
 )
-else
+elif [[ ${machine} == "raspberrypi2" ]]; then
 (
     deploy_dir="${OE_ROOT}/build/tmp-glibc/deploy/images/raspberrypi2/"
     # Note: all the append kernel command line parameters effectively
@@ -98,4 +98,7 @@ else
                         -nographic \
                         -append "rw earlyprintk loglevel=8  console=ttyAMA0 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootdelay=5"
 )
+else
+    echo "Machine ${machine} not supported"
+    exit 1
 fi
