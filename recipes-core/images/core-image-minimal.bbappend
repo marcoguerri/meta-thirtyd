@@ -18,10 +18,13 @@ IMAGE_INSTALL += " \
     dnsmasq \
     lighttpd \
     bash \
-    kernel-modules \
     psmisc \
     procps \
     iw \
     tmux \
     glibc-utils \
+    tpm2-tools \
+    libtss2-tcti-device \
+    python3 \
+    wireless-regdb-static \
     "
