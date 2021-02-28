@@ -24,7 +24,8 @@ RUN apt-get update && \
         bridge-utils \
         isc-dhcp-client \
         libcap2-bin \
-        sudo
+        sudo \
+        libssl-dev
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -33,8 +34,7 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_US.UTF-8
 
-# RUN echo "dev ALL=(ALL) NOPASSWD: /sbin/ip,/sbin/dhclient,/sbin/brctl" >> /etc/sudoers
-RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "dev ALL=(ALL) NOPASSWD: /sbin/ip,/sbin/dhclient,/sbin/brctl" >> /etc/sudoers
 
 RUN useradd -m dev
 
