@@ -1,4 +1,42 @@
-These notes are havily work in progress.
+These notes are heavily work in progress.
+
+# Configuring the interfaces
+```
+# brctl addbr br0
+# brctl addif br0 enp2s0
+# ip link set br0 up
+```
+
+Remove /lib//systemd/network/80-wired.network, or it will clash with any additional `.network` file:
+Modify /etc/default/dhcp-server to listen on br0.
+
+```
+pcengines-apu2:/etc/systemd/network# find . -type f -exec bash -c "echo {}; cat {}" \;
+./enp4s0.network
+[Match]
+Name=enp4s0
+
+[Network]
+DHCP=ipv4
+./enp3s0.network
+[Match]
+Name=enp3s0
+
+[Network]
+Bridge=br0
+./br0.network
+[Match]
+Name=br0
+
+[Network]
+ConfigureWithoutCarrier=true
+Address=192.168.2.1
+./br0.netdev
+[NetDev]
+Name=br0
+Kind=bridge
+```
+
 
 # 5Ghz configuration
 
