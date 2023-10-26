@@ -67,6 +67,15 @@ if [[ ${machine} == "qemux86-64" ]]; then
                        -drive file=${deploy_dir}/core-image-minimal-${machine}.ext4,if=virtio,format=raw \
                        -netdev tap,id=network0,ifname=tap0,script=no,downscript=no \
                        -device e1000,netdev=network0,mac=00:11:22:33:44:55
+
+# Fix the whole QEMU setup
+#       deploy_dir="${OE_ROOT}/build/tmp-glibc/deploy/images/qemux86-64"
+#       qemu-system-x86_64 -kernel ${deploy_dir}/bzImage \
+#       --append "console=ttyS0 root=/dev/hda2" \
+#       -nographic \
+#       -serial mon:stdio \
+#       -drive file=${deploy_dir}/core-image-minimal-qemux86-64.uefiimg,if=ide,format=raw
+
 )
 elif [[ ${machine} == "raspberrypi2" ]]; then
 (

@@ -48,7 +48,6 @@ RUN git clone -b dunfell https://github.com/openembedded/openembedded-core.git
 RUN install -d openembedded-core/build/conf
 RUN git clone -b 1.46 https://git.openembedded.org/bitbake
 RUN git clone -b dunfell https://github.com/openembedded/meta-openembedded.git
-RUN git clone -b dunfell https://github.com/agherzan/meta-raspberrypi
 RUN git clone -b dunfell https://github.com/pcengines/meta-pcengines
 RUN git clone https://github.com/marcoguerri/meta-thirtyd
 RUN git clone -b dunfell https://git.yoctoproject.org/git/meta-security
